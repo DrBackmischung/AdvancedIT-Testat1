@@ -1,15 +1,15 @@
 package de.mathisneunzig.testat1a;
 
-public class Zugthread extends Thread {
+public class LokThread extends Thread {
 	
-	private Zug z;
+	private Lok z;
 	private int id;
 	private double speed;
 
 	private final int lengthSharedTrack = 500;
 	private final int lengthOwnTrack = 1000;
 	
-	public Zugthread(int id, Zug z, double speed) {
+	public LokThread(int id, Lok z, double speed) {
 		this.id = id;
 		this.z = z;
 		this.speed = speed;
@@ -24,10 +24,10 @@ public class Zugthread extends Thread {
 			while(true) {
 				try {
 					// Zug 0 fährt auf der eigenen Strecke
-					Thread.sleep((long) (lengthOwnTrack * speed));
+					Thread.sleep((long) (lengthOwnTrack / speed));
 					// Zug 0 muss geteilten Abschnitt betreten
 					z.enterLok0();
-					Thread.sleep((long) (lengthSharedTrack * speed));
+					Thread.sleep((long) (lengthSharedTrack / speed));
 					z.exitLok0();
 					// Zug 0 verlässt den geteilten Abschnitt
 				} catch (InterruptedException e) {
@@ -38,10 +38,10 @@ public class Zugthread extends Thread {
 			while(true) {
 				try {
 					// Zug 1 fährt auf der eigenen Strecke
-					Thread.sleep((long) (lengthOwnTrack * speed));
+					Thread.sleep((long) (lengthOwnTrack / speed));
 					// Zug 1 muss geteilten Abschnitt betreten
 					z.enterLok1();
-					Thread.sleep((long) (lengthSharedTrack * speed));
+					Thread.sleep((long) (lengthSharedTrack / speed));
 					z.exitLok1();
 					// Zug 1 verlässt den geteilten Abschnitt
 				} catch (InterruptedException e) {

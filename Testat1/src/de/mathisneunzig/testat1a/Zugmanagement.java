@@ -4,13 +4,23 @@ public class Zugmanagement {
 	
 	public static void start() {
 		
-		Zug z = new Zug();	
+		// Beispiel 1
+		Lok l = new Lok();	
 
-		Zugthread zt0 = new Zugthread(0, z, 1.0D);
-		Zugthread zt1 = new Zugthread(1, z, 1.2D);
+		LokThread lok0 = new LokThread(0, l, 1.1D);
+		LokThread lok1 = new LokThread(1, l, 1.0D);
+
+		lok0.start();
+		lok1.start();
 		
-		zt0.start();
-		zt1.start();
+//		// Beispiel 2
+//		Lok l = new Lok();	
+//
+//		LokThread lok0 = new LokThread(0, l, 1.0D);
+//		LokThread lok1 = new LokThread(1, l, 1.1D);
+//
+//		lok1.start();
+//		lok0.start();
 		
 	}
 	
