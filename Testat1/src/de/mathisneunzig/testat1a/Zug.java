@@ -1,4 +1,4 @@
-package de.mathisneunzig.testat1;
+package de.mathisneunzig.testat1a;
 
 import java.util.concurrent.Semaphore;
 
