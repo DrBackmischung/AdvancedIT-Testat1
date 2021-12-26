@@ -1,4 +1,4 @@
-package de.mathisneunzig.testat1a;
+package testat1_1a;
 
 public class Zugmanagement {
 	
