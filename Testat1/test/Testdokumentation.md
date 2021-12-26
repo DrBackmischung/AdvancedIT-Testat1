@@ -1,6 +1,8 @@
 # Testat
 
-Bearbeitet von Mathis Neunzig - Matrikelnummer 2240587
+Bearbeitet von:
+Luis Maier - Matrikelnummer ?
+Mathis Neunzig - Matrikelnummer 2240587
 
 Beim Spielen mit ihrer neuen Holzeisenbahn legen Wladimir und Donald eine Strecke aus zwei Schienenkreisen, die in der Mitte ein gemeinsames Teilstück haben. Damit es keinen Streit gibt, beschließen die beiden,
 dass ihre Loks immer nur abwechselnd dieses gemeinsame Schienenstück befahren dürfen.
