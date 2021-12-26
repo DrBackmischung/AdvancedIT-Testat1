@@ -107,7 +107,96 @@ Lok1 verlässt den geteilten Abschnitt...
 
 Im zweiten Beispiel wird sichtbar, wie die Semaphoren "sharedTrack" und "lock" wirklich arbeiten. Lok1 fährt schneller und erreicht die Weiche schneller, muss jedoch Lok0 vor lassen. Da Lok1 zum Einfahren den "lock"-Semaphor benutzt, der mit 0 initialisiert wurde, kann Lok1 nicht einfahren, bis Lok0 beim Verlassen den "lock"-Semaphor-Counter auf 1 setzt. Dies hindert Lok1 daran, zu Beginn als erstes den gemeinsamen Gleisabschnitt zu befahren. Danach müssen die Loks nur warten, bis der Abschnitt frei ist, damit sie einfahren können.
 
+### Implementation - Beispiel 3
+
+``` java
+
+```
+
+### Ausgabe - Beispiel 3
+
+``` java
+
+```
+
+### Auswertung - Beispiel 3
+
+
+
 ## Aufgabe 1b
 
 Implementieren Sie eine Java-Lösung für die enter- und exit-Methoden mit privaten Semaphoren.
+
+### Implementation - Beispiel 1
+
+``` java
+	public static void start() {
+		
+		Lok l = new Lok();	
+
+		LokThread lok0 = new LokThread(0, l, 1.1D);
+		LokThread lok1 = new LokThread(1, l, 1.0D);
+		
+		lok0.start();
+		lok1.start();
+		
+	}
+```
+
+### Ausgabe - Beispiel 1
+
+``` java
+Lok0 will den geteilten Abschnitt befahren!
+Lok0 fährt ein! Choo choo!
+Lok1 will den geteilten Abschnitt befahren!
+Lok0 verlässt den geteilten Abschnitt...
+Lok1 fährt ein! Choo choo!
+Lok1 verlässt den geteilten Abschnitt...
+Lok0 will den geteilten Abschnitt befahren!
+Lok0 fährt ein! Choo choo!
+Lok0 verlässt den geteilten Abschnitt...
+Lok1 will den geteilten Abschnitt befahren!
+Lok1 fährt ein! Choo choo!
+Lok1 verlässt den geteilten Abschnitt...
+Lok0 will den geteilten Abschnitt befahren!
+Lok0 fährt ein! Choo choo!
+Lok0 verlässt den geteilten Abschnitt...
+Lok1 will den geteilten Abschnitt befahren!
+Lok1 fährt ein! Choo choo!
+Lok1 verlässt den geteilten Abschnitt...
+```
+
+### Auswertung - Beispiel 1
+
+to do
+
+### Implementation - Beispiel 2
+
+``` java
+
+```
+
+### Ausgabe - Beispiel 2
+
+``` java
+
+```
+
+### Auswertung - Beispiel 2
+
+
+
+### Implementation - Beispiel 3
+
+``` java
+
+```
+
+### Ausgabe - Beispiel 3
+
+``` java
+
+```
+
+### Auswertung - Beispiel 3
 
