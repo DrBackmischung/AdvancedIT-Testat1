@@ -16,6 +16,26 @@ Beginn das Mittelstück zuerst befahren.
 
 Implementieren Sie eine Java-Lösung für die enter- und exit-Methoden als Erzeuger/Verbraucher-Problem.
 
+### Implememtation - Semaphorenmanagement
+
+In der Aufgabe werden zwei Semaphoren benutzt, einen, der mit 1 initialisiert ist (sharedTrack) und einen, der mit 0 initialisiert ist (lock). Der Semaphor, der noch eine Ressource frei hat, wird für Lok0 zum Betreten des gemeinsamen Abschnittes genutzt, der andere für Lok1. Dies verhindert, dass Lok1 beginnt, bevor Lok0 den ABschnitt befahren konnte.
+
+``` java
+void enterLok0() throws InterruptedException {
+		sharedTrack.acquire();
+}
+void enterLok1() throws InterruptedException {
+		lock.acquire();
+}
+void exitLok0() {
+		lock.release();
+}
+void exitLok1() {
+		sharedTrack.release();
+}
+
+```
+
 ### Implementation - Beispiel 1
 
 Im ersten Beispiel ist Lok0 schneller, weshalb Lok0 auch zuerst den gemeinsamen Abschnitt befahren will und befährt. Da in der Lösung aber gefordert ist, dass Lok0 immer zuerst den gemeinsamen Abschnitt befährt, muss der LokThread dies berücksichtigen. Daher gibt es einen Semaphore(1, true), den Lok0 aquired, wenn diese den Abschnitt befahren will. Lok1 hat einen anderen Semaphore(0, true), der von Anfang an "voll" ist und der erst durch das Durchfahren von Lok0 freigeschaltet wird. 
