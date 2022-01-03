@@ -61,7 +61,7 @@ public class Lok {
 	
 	/**
 	 * Wird ausgeführt, wenn Lok1 an der Weiche ankommt
-	 * @see Semaphore
+	 * @see Semaphore 
 	 * @see #exitLok0()
 	 */
 	void enterLok1() throws InterruptedException {
@@ -89,7 +89,7 @@ public class Lok {
 		next = 0;
 		if(state[0] == WAITING) {
 			state[0] = DRIVING;
-			// Lok0 darf nun fahren => Lok1 freigeben!
+			// Lok0 darf nun fahren => Lok0 freigeben!
 			priv[0].release();
 		}
 		mutex.release();
