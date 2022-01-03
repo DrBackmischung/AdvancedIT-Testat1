@@ -129,25 +129,105 @@ Im zweiten Beispiel wird sichtbar, wie die Semaphoren "sharedTrack" und "lock" w
 
 ### Implementation - Beispiel 3
 
+Im dritten Beispiel ist Lok0 um ein Vielfaches schneller, welches dazu führen könnte, dass Lok0 mehrfach den gemeinsamen Abschnitt befährt. Dies soll jedoch verhindert werden, da es heißt, die Strecke soll abwechselnd befahren werden. Ob hier jetzt Lok0 oder Lok1 startet ist egal, Lok0 startet immer als Erste (siehe Beispiele 1 und 2).
+
 ``` java
+	
+	public static void start() {
+	
+		Lok l = new Lok();	
+
+		LokThread lok0 = new LokThread(0, l, 10.0D);
+		LokThread lok1 = new LokThread(1, l, 1.0D);
+
+		lok0.start();
+		lok1.start();
+		
+	}
 
 ```
 
 ### Ausgabe - Beispiel 3
 
 ``` java
+Lok0 will den geteilten Abschnitt befahren!
+Lok0 fährt ein! Choo choo!
+Lok0 verlässt den geteilten Abschnitt...
+Lok0 will den geteilten Abschnitt befahren!
+Lok1 will den geteilten Abschnitt befahren!
+Lok1 fährt ein! Choo choo!
+Lok1 verlässt den geteilten Abschnitt...
+Lok0 fährt ein! Choo choo!
+Lok0 verlässt den geteilten Abschnitt...
+Lok0 will den geteilten Abschnitt befahren!
+Lok1 will den geteilten Abschnitt befahren!
+Lok1 fährt ein! Choo choo!
+Lok1 verlässt den geteilten Abschnitt...
+Lok0 fährt ein! Choo choo!
+Lok0 verlässt den geteilten Abschnitt...
+Lok0 will den geteilten Abschnitt befahren!
+Lok1 will den geteilten Abschnitt befahren!
+Lok1 fährt ein! Choo choo!
 
 ```
 
 ### Auswertung - Beispiel 3
 
-
+Durch die beiden getrennten Semaphoren, können die Züge nur streng abwechselnd den Abschnitt befahren. 
 
 ## Aufgabe 1b
 
 Implementieren Sie eine Java-Lösung für die enter- und exit-Methoden mit privaten Semaphoren.
 
+### Implememtation - Semaphorenmanagement
+
+``` java
+	void enterLok0() throws InterruptedException {
+		mutex.acquire();
+		if(next == 0) {
+			priv[0].release();
+		} else {
+			state[0] = WAITING;
+		}
+		mutex.release();
+		priv[0].acquire();
+	}
+	
+	void exitLok0() throws InterruptedException {
+		mutex.acquire();
+		next = 1;
+		if(state[1] == WAITING) {
+			state[1] = DRIVING;
+			priv[1].release();
+		}
+		mutex.release();
+	}
+	
+	void enterLok1() throws InterruptedException {
+		mutex.acquire();
+		if(next == 1) {
+			priv[1].release();
+		} else {
+			state[1] = WAITING;
+		}
+		mutex.release();
+		priv[1].acquire();
+	}
+	
+	void exitLok1() throws InterruptedException {
+		mutex.acquire();
+		next = 0;
+		if(state[0] == WAITING) {
+			state[0] = DRIVING;
+			priv[0].release();
+		}
+		mutex.release();
+	}
+```
+
 ### Implementation - Beispiel 1
+
+Wie in Aufgabe 1a) wird hier Lok0 etwas schneller gemacht als Lok1. Sobald Lok0 den Abschnitt befahren will, kann diese ihren eigenen privaten Semaphor (priv[0]) freigeben, um ihn danach zu aquiren. Dies liegt daran, dass der Indikator für die nächste Durchfahrt auf 0 gestellt ist, das heißt, dass Lok1 nicht im Abschnitt ist und Lok0 mit dem Durchfahren dran ist. Wartet dann in der Zwischenzeit Lok1, muss diese dank des Infikators noch warten. Der Wartezustand muss dann durch Lok0 beim Verlassen aufgehoben werden, damit Lok1 fahren kann. 
 
 ``` java
 	public static void start() {
@@ -188,35 +268,100 @@ Lok1 verlässt den geteilten Abschnitt...
 
 ### Auswertung - Beispiel 1
 
-to do
+Die Ausgabe ist gleich mit der Ausgabe aus Aufgabe 1a). Die privaten Semaphoren und die Zustände sorgen für einen Ablauf, der mit dem des E/V-Problems übereinstimmt. Das Aufwachen der wartenden Lok funktioniert also wie geplant, wenn eine andere Lok den Abschnitt verlässt.
 
 ### Implementation - Beispiel 2
 
+Im zweiten Beispiel ist Lok1 schneller und startet früher. Hier muss der Indikator für die nächste Durchfahrt dafür sorgen, dass trotzdem erst Lok0 fährt.
+
 ``` java
+	
+	public static void start() {
+		
+		Lok l = new Lok();	
+
+		LokThread lok0 = new LokThread(0, l, 1.0D);
+		LokThread lok1 = new LokThread(1, l, 1.1D);
+
+		lok1.start();
+		lok0.start();
+		
+	}
 
 ```
 
 ### Ausgabe - Beispiel 2
 
 ``` java
+Lok1 will den geteilten Abschnitt befahren!
+Lok0 will den geteilten Abschnitt befahren!
+Lok0 fährt ein! Choo choo!
+Lok0 verlässt den geteilten Abschnitt...
+Lok1 fährt ein! Choo choo!
+Lok1 verlässt den geteilten Abschnitt...
+Lok0 will den geteilten Abschnitt befahren!
+Lok0 fährt ein! Choo choo!
+Lok1 will den geteilten Abschnitt befahren!
+Lok0 verlässt den geteilten Abschnitt...
+Lok1 fährt ein! Choo choo!
+Lok1 verlässt den geteilten Abschnitt...
+Lok0 will den geteilten Abschnitt befahren!
+Lok0 fährt ein! Choo choo!
+Lok1 will den geteilten Abschnitt befahren!
+Lok0 verlässt den geteilten Abschnitt...
+Lok1 fährt ein! Choo choo!
+Lok1 verlässt den geteilten Abschnitt...
 
 ```
 
 ### Auswertung - Beispiel 2
 
-
+Auch wenn Lok1 schneller und früher an der Weiche ist, wird Lok0 zuerst durchgelassen. Der Indikator, der die nächste Lok zeigt, die durchfahren darf, funktioniert. Zu Beginn steht diese auf 0, was Lok0 ermöglicht, den privaten Semaphor für die Durchfahrt freizugeben. Lok1 kann das nicht, solange Lok0 nicht den gemeinsamen Abschnitt durchfahren hat und den Indikator auf = 1 gesetzt hat.
 
 ### Implementation - Beispiel 3
 
+Wie bereits in Aufgabe 1a) muss getestet werden, ob die Züge auch streng abwechselnd fahren, da dies gegeben sein soll - auch wenn ein Zug von der Geschwindigkeit ein Vielfaches schneller ist.
+
 ``` java
+	
+	public static void start() {
+	
+		Lok l = new Lok();	
+
+		LokThread lok0 = new LokThread(0, l, 10.0D);
+		LokThread lok1 = new LokThread(1, l, 1.0D);
+
+		lok0.start();
+		lok1.start();
+		
+	}
 
 ```
 
 ### Ausgabe - Beispiel 3
 
 ``` java
+Lok0 will den geteilten Abschnitt befahren!
+Lok0 fährt ein! Choo choo!
+Lok0 verlässt den geteilten Abschnitt...
+Lok0 will den geteilten Abschnitt befahren!
+Lok1 will den geteilten Abschnitt befahren!
+Lok1 fährt ein! Choo choo!
+Lok1 verlässt den geteilten Abschnitt...
+Lok0 fährt ein! Choo choo!
+Lok0 verlässt den geteilten Abschnitt...
+Lok0 will den geteilten Abschnitt befahren!
+Lok1 will den geteilten Abschnitt befahren!
+Lok1 fährt ein! Choo choo!
+Lok1 verlässt den geteilten Abschnitt...
+Lok0 fährt ein! Choo choo!
+Lok0 verlässt den geteilten Abschnitt...
+Lok0 will den geteilten Abschnitt befahren!
+Lok1 will den geteilten Abschnitt befahren!
+Lok1 fährt ein! Choo choo!
 
 ```
 
 ### Auswertung - Beispiel 3
 
+Wie in Aufgabe 1a) ist auch hier gegeben, dass die Züge abwechselnd fahren. Lok0 muss nur öfter mal etwas länger warten. Dafür sorgt der Indikator, wenn auch wenn Lok0 nach der Durchfaht schnell ankommt und den Abschnitt befahren will, muss Lok0 trotzdem erst auf eine Durchfahrt von Lok1 warten. 
